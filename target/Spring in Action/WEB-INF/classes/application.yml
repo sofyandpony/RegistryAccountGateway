@@ -1,0 +1,17 @@
+## YAML Template.
+server:
+    address: localhost
+    port: 8080
+
+spring:
+    profiles:
+        active: development
+
+logback:
+    log:
+        directory: /logs/tomcat/msi/
+        logFileName: logs
+        logFileError: logs_error
+        fileDirectory: conf/logback.xml
+
+logbackLogDirectory: test

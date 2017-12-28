@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoding>UTF-8</encoding>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </layout>
+    </appender>
+    <appender name="errorAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoding>UTF-8</encoding>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] %logger{10} [%file:%line] %msg%n</pattern> 
+        </encoder>
+        <!--        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </layout>-->
+    </appender>
+    <appender name="systemFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}${LOG_NAME_FILE}.log</file>
+        <!--        <filter class="com.primesoft.dms.api.util.LevelRangeFilter">
+            <levelMin>ERROR</levelMin>
+            <levelMax>INFO</levelMax>
+        </filter>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}${LOG_NAME_FILE}-%d.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="errorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}${LOG_NAME_ERROR}.log</file>
+        <filter class="com.upraxis.msinaction.utils.LevelRangeFilter">
+            <levelMin>WARN</levelMin>
+            <levelMax>ERROR</levelMax>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                ${LOG_DIR}${LOG_NAME_ERROR}-%d.%i.log.gz
+            </FileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+<!--    <appender name="databaseAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}${LOG_NAME_DB}.log</file>
+                <filter class="com.primesoft.dms.api.util.LevelRangeFilter">
+            <levelMin>TRACE</levelMin>
+            <levelMax>WARN</levelMax>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern> ${LOG_DIR}${LOG_NAME_DB}-%d.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>-->
+<!--    <appender name="timeRequestAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}${LOG_NAME_TIME_REQUEST}.log</file>
+                <filter class="com.primesoft.dms.api.util.LevelRangeFilter">
+            <levelMin>TRACE</levelMin>
+            <levelMax>INFO</levelMax>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}${LOG_NAME_TIME_REQUEST}-%d.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>5MB</MaxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>-->
+    
+    <logger name="com.upraxis.msinaction.web" level="TRACE" additivity="false">
+        <appender-ref ref="systemFileAppender" />
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="errorFileAppender" />
+    </logger>
+    <logger name="org.springframework" level="TRACE" additivity="false">
+        <appender-ref ref="systemFileAppender" />
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="errorFileAppender" />
+    </logger>
+    <root level="TRACE">
+        <appender-ref ref="databaseAppender" />
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="errorAppender" />
+        <appender-ref ref="errorFileAppender" />
+        <appender-ref ref="timeRequestAppender" />
+        <appender-ref ref="systemFileAppender" />
+    </root>
+</configuration>
